@@ -75,7 +75,6 @@ export async function updateContacts(id, data) {
     const { name, email, phone } = data;
     const contactsList = await contacts();
     const contact = await getContactById(id);
-    console.log('contact', contact)
     if (!contact) {
         return null;
     }

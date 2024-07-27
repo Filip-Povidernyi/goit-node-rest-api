@@ -25,7 +25,7 @@ export const getOneContact = async (req, res, next) => {
         next(error);
     }
 };
-export const deleteContact = async (req, res) => {
+export const deleteContact = async (req, res, next) => {
     const { id } = req.params;
     try {
         const delContact = await contactsService.removeContact(id);

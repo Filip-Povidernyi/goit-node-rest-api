@@ -1,10 +1,10 @@
 import express from "express";
 import {
     getAllContacts,
-    getOneContact,
     deleteContact,
     createContact,
     updateContact,
+    getOneContact,
 } from "../controllers/contactsControllers.js";
 import { createContactSchema, updateContactSchema } from "../schemas/contactsSchemas.js";
 import validateBody from "../helpers/validateBody.js";
