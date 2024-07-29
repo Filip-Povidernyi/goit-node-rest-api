@@ -17,5 +17,8 @@
     "joi": "^17.13.3",
     "morgan": "^1.10.0",
     "nanoid": "^5.0.7"
-  }
+  },
+  "version": "1.0.0",
+  "description": "Домашнє завдання. Тема 4. REST API",
+  "main": "app.js"
 }
