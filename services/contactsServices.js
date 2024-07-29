@@ -35,12 +35,6 @@ export async function removeContact(contactId) {
 
     const index = contactsList.findIndex(contact => contact.id === contactId);
 
-    if (index === -1) {
-        console.log(`\x1B[31m No contact with this id: ${contactId}`);
-
-        return null;
-    };
-
     const remContact = contactsList.splice(index, 1);
 
     await fs.writeFile(contactsPath, JSON.stringify(contactsList, null, 2));
