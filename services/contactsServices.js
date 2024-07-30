@@ -1,99 +1,112 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-import { nanoid } from "nanoid";
+import { sequelize } from "../db/db_server.js";
+import { DataTypes } from "sequelize";
 
 
 
-const contactsPath = path.resolve("db", "contacts.json");
+const Contact = sequelize.define(
+    'contacts', {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phone: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      favorite: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      
+    },
+    { 
+        timestamps: false,
+    },
+);
 
-const contacts = async () => {
 
-    const data = await fs.readFile(contactsPath, "utf-8");
+async function listContacts() {
 
-    return JSON.parse(data);
-};
-
-
-export async function listContacts() {
-
-    const contactsList = await contacts();
+    const contactsList = await Contact.findAll();
 
     return contactsList;
 };
 
-export async function getContactById(contactId) {
 
-    const contactsList = await contacts();
-    const contact = contactsList.find(contact => contact.id === contactId);
+async function getContactById(contactId) {
 
-    return contact || null;
-};
+    const contact = await Contact.findAll({
+        where: {
+            id: contactId,
+        },
+    });
 
-export async function removeContact(contactId) {
-
-    if (contactId.length !== 21) {
-        
-        return null;
-    }
-
-    const contactsList = await contacts();
-
-    const index = contactsList.findIndex(contact => contact.id === contactId);
-
-    if (index === -1) {
-        
+    if (!contact.length) {
         return null;
     };
 
-    const remContact = contactsList.splice(index, 1);
+    return contact[0];
+};
 
-    await fs.writeFile(contactsPath, JSON.stringify(contactsList, null, 2));
+async function removeContact(contactId) {
+
+    const remContact = await Contact.findAll({
+        where: 
+            {id: contactId,},
+        });
+        
+    await Contact.destroy({
+            where: 
+                {id: contactId,},
+            });
+
+    if (!remContact.length) {
+        return null;
+    };
 
     return remContact[0];
 };
 
-export async function addContact(data) {
+async function addContact(data) {
 
-    const contactsList = await contacts();
-
-    const newContact = {
-        id: nanoid(),
+    const newContact = await Contact.create({
         ...data,
-    };
+    });
 
-    contactsList.push(newContact);
-
-    await fs.writeFile(contactsPath, JSON.stringify(contactsList, null, 2));
 
     return newContact;
 
 };
 
-export async function updateContacts(id, data) {
-    const { name, email, phone } = data;
-    const contactsList = await contacts();
-    const contact = await getContactById(id);
-    if (!contact) {
-        return null;
-    }
-    if (name) {
-        contact.name = name;
-    };
-    if (email) {
-        contact.email = email;
-    };
-    if (phone) {
-        contact.phone = phone;
-    };
+async function updateContacts(id, data) {
 
-    contactsList.push(contact);
+    await Contact.update({
+        ...data,
+    }, 
+        {where: 
+            {id: id,},
+        });
 
-    await fs.writeFile(contactsPath, JSON.stringify(contactsList, null, 2));
 
-    await removeContact(id);
-    return contact;
+    const updContact = await Contact.findAll({where:{id: id}});
+
+    return updContact[0];
 };
 
+async function updateStatusContact (contactId, data) {
+
+    await Contact.update({...data}, {where: {id: contactId}});
+
+    const statusUpdContact = await Contact.findAll({where:{id: contactId}});
+
+    return statusUpdContact[0];
+};
+
+await Contact.sync();
 
 const contactsService = {
     listContacts,
@@ -101,6 +114,7 @@ const contactsService = {
     removeContact,
     addContact,
     updateContacts,
+    updateStatusContact,
 };
 
 export default contactsService
