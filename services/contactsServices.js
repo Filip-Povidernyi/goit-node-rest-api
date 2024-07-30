@@ -5,25 +5,25 @@ import { DataTypes } from "sequelize";
 
 const Contact = sequelize.define(
     'contacts', {
-      name: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      email: {
+    },
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      phone: {
+    },
+    phone: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      favorite: {
+    },
+    favorite: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-      },
-      
     },
-    { 
+
+},
+    {
         timestamps: false,
     },
 );
@@ -55,14 +55,14 @@ async function getContactById(contactId) {
 async function removeContact(contactId) {
 
     const remContact = await Contact.findAll({
-        where: 
-            {id: contactId,},
-        });
-        
+        where:
+            { id: contactId, },
+    });
+
     await Contact.destroy({
-            where: 
-                {id: contactId,},
-            });
+        where:
+            { id: contactId, },
+    });
 
     if (!remContact.length) {
         return null;
@@ -86,22 +86,23 @@ async function updateContacts(id, data) {
 
     await Contact.update({
         ...data,
-    }, 
-        {where: 
-            {id: id,},
+    },
+        {
+            where:
+                { id: id, },
         });
 
 
-    const updContact = await Contact.findAll({where:{id: id}});
+    const updContact = await Contact.findAll({ where: { id: id } });
 
     return updContact[0];
 };
 
-async function updateStatusContact (contactId, data) {
+async function updateStatusContact(contactId, data) {
 
-    await Contact.update({...data}, {where: {id: contactId}});
+    await Contact.update({ ...data }, { where: { id: contactId } });
 
-    const statusUpdContact = await Contact.findAll({where:{id: contactId}});
+    const statusUpdContact = await Contact.findAll({ where: { id: contactId } });
 
     return statusUpdContact[0];
 };
