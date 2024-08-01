@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 
-const {DIALECT, USERNAME, DATABASE, PASSWORD, HOST, PORT, PROTOCOL} = process.env();
+const {DIALECT, USERNAME, DATABASE, PASSWORD, HOST, PORT, PROTOCOL} = process.env;
 
 export const sequelize = new Sequelize({
     dialect: DIALECT,
