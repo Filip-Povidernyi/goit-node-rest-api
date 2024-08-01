@@ -6,26 +6,18 @@ import { Sequelize } from 'sequelize';
 dotenv.config();
 const DB_PASS = process.env.DB_PASSWORD;
 
-export const sequelize = new Sequelize(`postgresql://filip_povidernyi:${DB_PASS}@dpg-cqjmsf5ds78s73f2bgug-a.frankfurt-postgres.render.com/db_contacts_gjuf`, {
+export const sequelize = new Sequelize({
     dialect: 'postgres',
+    username: "filip_povidernyi",
+    database: "db_contacts_gjuf",
+    password: `${DB_PASS}`,
+    host: "dpg-cqjmsf5ds78s73f2bgug-a.frankfurt-postgres.render.com",
+    port: "5432",
     protocol: 'postgres',
     dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false
-        }
+        ssl: true,
     }
 });
 
-async function foo() {
-  try {
-    await sequelize.authenticate();
-    
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-    process.exit(1);
-  };
-};
+export default sequelize;
 
-foo();

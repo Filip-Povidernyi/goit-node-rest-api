@@ -20,6 +20,10 @@ const Contact = sequelize.define(
     favorite: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+<<<<<<< Updated upstream
+=======
+      }, 
+>>>>>>> Stashed changes
     },
 
 },
