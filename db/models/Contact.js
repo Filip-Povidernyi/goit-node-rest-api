@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../db_server";
+import sequelize from "../db_server.js";
 
 const Contact = sequelize.define(
-    'contact', {
+    "contact", {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -18,12 +18,9 @@ const Contact = sequelize.define(
     favorite: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-    },
+    }
+});
 
-},
-    {
-        timestamps: false,
-    },
-);
+// Contact.sync();
 
 export default Contact;

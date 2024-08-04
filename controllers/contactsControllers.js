@@ -37,7 +37,7 @@ const deleteContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-    
+
     const newContact = await contactsService.addContact(req.body);
 
     res.status(201).json(newContact);
@@ -57,7 +57,7 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatus = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
 
     const updStatusContact = await contactsService.updateStatusContact(id, req.body);
     if (!updStatusContact) {
