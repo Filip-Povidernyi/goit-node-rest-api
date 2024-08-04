@@ -1,85 +1,78 @@
 import Contact from "../db/models/Contact.js";
 
 
-async function listContacts() {
+function listContacts() {
 
-    const contactsList = await Contact.findAll();
+    const contactsList = Contact.findAll();
 
     return contactsList;
 };
 
 
-async function getContactById(contactId) {
+function getContactById(contactId) {
 
-    const contact = await Contact.findAll({
+    const contact = Contact.findOne({
         where: {
             id: contactId,
         },
     });
 
-    if (!contact.length) {
+    if (!contact) {
         return null;
     };
 
-    return contact[0];
+    return contact;
 };
 
-async function removeContact(contactId) {
+async function removeContact(id) {
 
-    const remContact = await Contact.findAll({
+    const remContact = await Contact.findOne({
         where:
-            { id: contactId, },
+            { id, },
     });
 
-    await Contact.destroy({
+    Contact.destroy({
         where:
-            { id: contactId, },
+            { id, },
     });
 
-    if (!remContact.length) {
+    if (!remContact) {
         return null;
     };
 
-    return remContact[0];
+    return remContact;
 };
 
-async function addContact(data) {
+function addContact(data) {
 
-    const newContact = await Contact.create({
-        ...data,
-    });
-
-
+    const newContact = Contact.create(data);
     return newContact;
 
 };
 
 async function updateContacts(id, data) {
 
-    await Contact.update({
-        ...data,
-    },
+    await Contact.update(
+        data,
         {
             where:
-                { id: id, },
+                { id, },
         });
 
 
-    const updContact = await Contact.findAll({ where: { id: id } });
+    const updContact = Contact.findOne({ where: { id, } });
 
-    return updContact[0];
+    return updContact;
 };
 
-async function updateStatusContact(contactId, data) {
+async function updateStatusContact(id, data) {
 
-    await Contact.update({ ...data }, { where: { id: contactId } });
+    await Contact.update(data, { where: { id, } });
 
-    const statusUpdContact = await Contact.findAll({ where: { id: contactId } });
+    const statusUpdContact = Contact.findOne({ where: { id, } });
 
-    return statusUpdContact[0];
+    return statusUpdContact;
 };
-
-await Contact.sync();
 
 const contactsService = {
     listContacts,
