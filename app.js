@@ -7,7 +7,7 @@ import "dotenv/config"
 import contactsRouter from "./routes/contactsRouter.js";
 import sequelize from "./db/db_server.js";
 
- 
+
 const app = express();
 
 app.use(morgan("tiny"));
@@ -25,19 +25,22 @@ app.use((err, req, res, next) => {
     res.status(status).json({ message });
 });
 
+const { SERVER_PORT } = process.env;
+const port = Number(SERVER_PORT);
+
 (async () => {
     try {
         await sequelize.authenticate();
-        app.listen(3000, () => {
+        console.log('Connection has been established successfully.');
+        app.listen(port, () => {
             console.log("Server is running. Use our API on port: 3000");
         });
-        console.log('Connection has been established successfully.');
     } catch (error) {
         console.error('Unable to connect to the database:', error);
         process.exit(1);
     };
 })();
 
-  
+
 
 
