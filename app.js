@@ -33,7 +33,7 @@ const port = Number(SERVER_PORT);
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
         app.listen(port, () => {
-            console.log("Server is running. Use our API on port: 3000");
+            console.log(`Server is running. Use our API on port: ${port}`);
         });
     } catch (error) {
         console.error('Unable to connect to the database:', error);
