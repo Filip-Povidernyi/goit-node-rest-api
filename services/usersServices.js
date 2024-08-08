@@ -7,12 +7,6 @@ async function addUser(data) {
 
     const {email, password} = data;
 
-    const existUser = await Contact.findOne({where: {email}});
-    
-    if (existUser) {
-        throw HttpError(409, "Email in use");
-    };
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = User.create({
@@ -23,8 +17,13 @@ async function addUser(data) {
     return newUser;
 };
 
+function findUser(email) {
+    return User.findOne({where:{email}});
+};
+
 const userServices = {
     addUser,
+    findUser,
 };
 
 export default userServices;
