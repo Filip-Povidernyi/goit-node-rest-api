@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 async function addUser(data) {
 
-    const {email, password} = data;
+    const { email, password } = data;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -18,7 +18,8 @@ async function addUser(data) {
 };
 
 function findUser(data) {
-    return User.findOne({where: data});
+
+    return User.findOne({ where: data });
 };
 
 const userServices = {

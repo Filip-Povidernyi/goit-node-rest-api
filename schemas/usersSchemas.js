@@ -16,3 +16,7 @@ export const createUserSchema = Joi.object({
     email: Joi.string().email().required(),
     password: complexPasswordSchema,
 });
+
+export const updSubscriptionSchema = Joi.object({
+    subscription: Joi.string().valid('starter', 'pro', 'business').required(),
+});

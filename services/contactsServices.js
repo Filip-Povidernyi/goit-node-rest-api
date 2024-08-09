@@ -1,20 +1,29 @@
 import Contact from "../db/models/Contact.js";
 
 
-function listContacts(data={}) {
+function listContacts(query = {}, page = 1, limit = 20, favorite = false) {
 
-    const contactsList = Contact.findAll({where: data,});
+    const normLimit = Number(limit);
+    const normOffset = (Number(page) - 1) * normLimit;
+
+    if (favorite) {
+        query.favorite = favorite === 'true';
+    }
+
+    const contactsList = Contact.findAll({
+        where: query,
+        offset: normOffset,
+        limit: normLimit,
+    });
 
     return contactsList;
 };
 
 
-function getContactById(contactId) {
+function getContactById(query) {
 
     const contact = Contact.findOne({
-        where: {
-            id: contactId,
-        },
+        where: query
     });
 
     if (!contact) {
@@ -24,52 +33,50 @@ function getContactById(contactId) {
     return contact;
 };
 
-async function removeContact(id) {
+async function removeContact(query) {
 
     const remContact = await Contact.findOne({
-        where:
-            { id, },
-    });
-
-    Contact.destroy({
-        where:
-            { id, },
+        where: query
     });
 
     if (!remContact) {
         return null;
     };
 
+    Contact.destroy({
+        where: query
+    });
+
+
     return remContact;
 };
 
-function addContact(data, owner) {
+function addContact(query) {
 
-    const newContact = Contact.create({...data, owner});
+    const newContact = Contact.create(query);
     return newContact;
 
 };
 
-async function updateContacts(id, data) {
+async function updateContacts(query, data) {
 
     await Contact.update(
         data,
         {
-            where:
-                { id, },
+            where: query
         });
 
 
-    const updContact = Contact.findOne({ where: { id, } });
+    const updContact = Contact.findOne({ where: query });
 
     return updContact;
 };
 
-async function updateStatusContact(id, data) {
+async function updateStatusContact(query, data) {
 
-    await Contact.update(data, { where: { id, } });
+    await Contact.update(data, { where: query });
 
-    const statusUpdContact = Contact.findOne({ where: { id, } });
+    const statusUpdContact = Contact.findOne({ where: query });
 
     return statusUpdContact;
 };
