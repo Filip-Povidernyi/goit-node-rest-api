@@ -3,10 +3,13 @@ import controller from "../controllers/contactsControllers.js";
 import { createContactSchema, updateContactSchema, updateStatusContactSchema } from "../schemas/contactsSchemas.js";
 import validateBody from "../helpers/validateBody.js";
 import checkBody from "../helpers/checkBody.js";
+import authenticate from "../middlewarws/authenticate.js";
 
 
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", controller.getAllContacts);
 

@@ -1,9 +1,9 @@
 import Contact from "../db/models/Contact.js";
 
 
-function listContacts() {
+function listContacts(query={}) {
 
-    const contactsList = Contact.findAll();
+    const contactsList = Contact.findAll({where:query});
 
     return contactsList;
 };
@@ -43,9 +43,9 @@ async function removeContact(id) {
     return remContact;
 };
 
-function addContact(data) {
+function addContact(data, owner) {
 
-    const newContact = Contact.create(data);
+    const newContact = Contact.create(data, owner);
     return newContact;
 
 };

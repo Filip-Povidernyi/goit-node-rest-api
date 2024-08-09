@@ -17,8 +17,8 @@ async function addUser(data) {
     return newUser;
 };
 
-function findUser(email) {
-    return User.findOne({where:{email}});
+function findUser(data) {
+    return User.findOne({where: data});
 };
 
 const userServices = {
