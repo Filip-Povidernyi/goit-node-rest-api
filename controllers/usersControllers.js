@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
 const loginUser = async (req, res) => {
 
     const {email, password} = req.body;
-    const user = await userServices.findUser(email);
+    const user = await userServices.findUser({email});
 
     if (!user) {
         throw HttpError(401, "Email or password is wrong");

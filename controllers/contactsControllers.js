@@ -6,11 +6,13 @@ import contactsService from "../services/contactsServices.js";
 
 const getAllContacts = async (req, res) => {
 
-    const allContacts = await contactsService.listContacts();
+    const {id: owner} = req.user;
+    const allContacts = await contactsService.listContacts({owner});
     res.json(allContacts);
 };
 
 const getOneContact = async (req, res) => {
+    
     const { id } = req.params;
 
     const contactId = await contactsService.getContactById(id);
@@ -38,7 +40,9 @@ const deleteContact = async (req, res) => {
 
 const createContact = async (req, res) => {
 
-    const newContact = await contactsService.addContact(req.body);
+    const {id: owner} = req.user;
+
+    const newContact = await contactsService.addContact(...req.body, owner);
 
     res.status(201).json(newContact);
 
