@@ -1,9 +1,9 @@
 import Contact from "../db/models/Contact.js";
 
 
-function listContacts(query={}) {
+function listContacts(data={}) {
 
-    const contactsList = Contact.findAll({where:query});
+    const contactsList = Contact.findAll({where: data,});
 
     return contactsList;
 };
