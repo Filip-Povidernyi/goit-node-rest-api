@@ -45,7 +45,7 @@ async function removeContact(id) {
 
 function addContact(data, owner) {
 
-    const newContact = Contact.create(data, owner);
+    const newContact = Contact.create({...data, owner});
     return newContact;
 
 };
