@@ -9,6 +9,7 @@ const getAllContacts = async (req, res) => {
     const { id: owner } = req.user;
     const { page, limit, favorite } = req.query;
     const allContacts = await contactsService.listContacts({ owner }, page, limit, favorite);
+
     res.json(allContacts);
 };
 
@@ -28,6 +29,7 @@ const getOneContact = async (req, res) => {
 };
 
 const deleteContact = async (req, res) => {
+
     const { id } = req.params;
     const { id: owner } = req.user;
 
@@ -52,6 +54,7 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
+
     const { id } = req.params;
     const { id: owner } = req.user;
 
@@ -62,9 +65,11 @@ const updateContact = async (req, res) => {
     };
 
     res.json(updateContact);
+
 };
 
 const updateStatus = async (req, res) => {
+
     const { id } = req.params;
     const { id: owner } = req.user;
 
@@ -72,8 +77,10 @@ const updateStatus = async (req, res) => {
     if (!updStatusContact) {
         throw HttpError(404);
     };
+
     res.json(updStatusContact);
-}
+
+};
 
 const controller = {
     getAllContacts: ctrlWrapper(getAllContacts),
@@ -83,6 +90,7 @@ const controller = {
     updateContact: ctrlWrapper(updateContact),
     updateStatus: ctrlWrapper(updateStatus),
 };
+
 
 
 export default controller;

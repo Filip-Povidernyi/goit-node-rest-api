@@ -11,16 +11,15 @@ import fs from "node:fs/promises";
 import sharp from 'sharp';
 
 
+
 const { SECRET_KEY_JWT } = process.env;
 const avatarDir = path.resolve('public', 'avatars');
-
 
 
 const createUser = async (req, res) => {
 
     const newUser = await userServices.addUser(req.body);
     res.status(201).json(newUser);
-
 };
 
 const loginUser = async (req, res) => {
@@ -55,7 +54,6 @@ const loginUser = async (req, res) => {
             subscription: user.subscription
         },
     });
-
 };
 
 const checkCurrent = async (req, res) => {
@@ -73,6 +71,7 @@ const checkCurrent = async (req, res) => {
 };
 
 const userLogout = async (req, res) => {
+
     const { id } = req.user;
 
     await User.update(
@@ -85,6 +84,7 @@ const userLogout = async (req, res) => {
 };
 
 const updSubscription = async (req, res) => {
+
     const { id } = req.user;
     const { subscription } = req.body;
 
@@ -96,9 +96,9 @@ const updSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+
     const { id, email } = req.user;
     const { path: tempUpload, originalname } = req.file;
- 
     
     const filename = `${email}-${originalname}`;
     const resultUpload = path.resolve(avatarDir, filename);
@@ -116,6 +116,7 @@ const updateAvatar = async (req, res) => {
     await userServices.updateUser({ id }, { avatarURL });
 
     res.json({ avatarURL });
+    
   };
 
 const userController = {
