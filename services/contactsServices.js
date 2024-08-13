@@ -1,6 +1,7 @@
 import Contact from "../db/models/Contact.js";
 
 
+
 function listContacts(query = {}, page = 1, limit = 20, favorite = false) {
 
     const normLimit = Number(limit);
@@ -8,7 +9,7 @@ function listContacts(query = {}, page = 1, limit = 20, favorite = false) {
 
     if (favorite) {
         query.favorite = favorite === 'true';
-    }
+    };
 
     const contactsList = Contact.findAll({
         where: query,
@@ -18,7 +19,6 @@ function listContacts(query = {}, page = 1, limit = 20, favorite = false) {
 
     return contactsList;
 };
-
 
 function getContactById(query) {
 
@@ -46,7 +46,6 @@ async function removeContact(query) {
     Contact.destroy({
         where: query
     });
-
 
     return remContact;
 };

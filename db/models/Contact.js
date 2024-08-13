@@ -1,6 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db_server.js";
 
+
+
 const Contact = sequelize.define(
     "contact", {
     name: {

@@ -21,4 +21,6 @@ authRouter.patch("/subscription", authenticate, validateBody(updSubscriptionSche
 
 authRouter.patch("/avatars", authenticate, upload.single("avatar"), userController.updateAvatar);
 
+
+
 export default authRouter;

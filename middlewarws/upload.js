@@ -3,6 +3,7 @@ import multer from "multer";
 import createFolderIsNotExist from "../helpers/checkFolder.js";
 
 
+
 const tempDir = path.resolve("temp");
 
 await createFolderIsNotExist(tempDir);
@@ -20,4 +21,6 @@ const storage = multer.diskStorage({
     storage: storage,
   });
 
+
+  
   export default upload;
