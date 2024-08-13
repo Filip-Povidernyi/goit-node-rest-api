@@ -3,6 +3,7 @@ import validateBody from "../helpers/validateBody.js";
 import { createUserSchema, updSubscriptionSchema } from "../schemas/usersSchemas.js";
 import userController from "../controllers/usersControllers.js";
 import authenticate from "../middlewarws/authenticate.js";
+import upload from "../middlewarws/upload.js";
 
 
 
@@ -17,5 +18,7 @@ authRouter.post("/logout", authenticate, userController.userLogout);
 authRouter.get("/current", authenticate, userController.checkCurrent);
 
 authRouter.patch("/subscription", authenticate, validateBody(updSubscriptionSchema), userController.updSubscription);
+
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), userController.updateAvatar);
 
 export default authRouter;

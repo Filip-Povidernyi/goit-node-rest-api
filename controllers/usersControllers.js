@@ -6,10 +6,13 @@ import HttpError from "../helpers/HttpErrors.js";
 import userServices from "../services/usersServices.js";
 import contactsService from "../services/contactsServices.js";
 import User from "../db/models/User.js";
-import { where } from "sequelize";
+import path from "path";
+import fs from "node:fs/promises";
+import sharp from 'sharp';
 
 
 const { SECRET_KEY_JWT } = process.env;
+const avatarDir = path.resolve('public', 'avatars');
 
 
 
@@ -37,8 +40,6 @@ const loginUser = async (req, res) => {
 
     const { id } = user;
 
-    const contacts = await contactsService.listContacts({ owner: id });
-
     const payload = {
         id,
     };
@@ -53,7 +54,6 @@ const loginUser = async (req, res) => {
             email: user.email,
             subscription: user.subscription
         },
-        contacts
     });
 
 };
@@ -88,15 +88,35 @@ const updSubscription = async (req, res) => {
     const { id } = req.user;
     const { subscription } = req.body;
 
-    await User.update(
-        { subscription },
-        { where: { id, } },
-    );
+    await userServices.updateUser({ id }, { subscription });
 
     const user = await userServices.findUser({ id });
 
     res.json(user);
-}
+};
+
+const updateAvatar = async (req, res) => {
+    const { id, email } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+ 
+    
+    const filename = `${email}-${originalname}`;
+    const resultUpload = path.resolve(avatarDir, filename);
+
+    const img = sharp(tempUpload);
+    await img
+        .resize(250, 250, {
+        fit: sharp.fit.cover,
+        position: sharp.strategy.entropy
+        })
+        .toFile(resultUpload);
+
+    await fs.unlink(tempUpload);
+    const avatarURL = path.resolve('avatars', filename);
+    await userServices.updateUser({ id }, { avatarURL });
+
+    res.json({ avatarURL });
+  };
 
 const userController = {
     createUser: ctrlWrapper(createUser),
@@ -104,6 +124,7 @@ const userController = {
     checkCurrent: ctrlWrapper(checkCurrent),
     userLogout: ctrlWrapper(userLogout),
     updSubscription: ctrlWrapper(updSubscription),
+    updateAvatar: ctrlWrapper(updateAvatar),
 };
 
 

@@ -15,6 +15,10 @@ const ctrlWrapper = (ctrl) => {
             if (error instanceof ValidationError) {
                 return next(HttpError(400, error.message));
             };
+
+            if (error.message === "Cannot destructure property 'path' of 'req.file' as it is undefined.") {
+                return next(HttpError(401, "Not authorized"))
+            }
             next(error);
         };
     };
