@@ -1,14 +1,15 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import path from "node:path";
+import fs from "node:fs/promises";
+import sharp from 'sharp';
 
 import ctrlWrapper from "../helpers/ctrlWrappers.js";
 import HttpError from "../helpers/HttpErrors.js";
 import userServices from "../services/usersServices.js";
 import contactsService from "../services/contactsServices.js";
 import User from "../db/models/User.js";
-import path from "path";
-import fs from "node:fs/promises";
-import sharp from 'sharp';
+import cloudinary from "../helpers/cloudinary.js";
 
 
 
@@ -100,7 +101,7 @@ const updateAvatar = async (req, res) => {
     const { id, email } = req.user;
     const { path: tempUpload, originalname } = req.file;
     
-    const filename = `${email}-${originalname}`;
+    const filename = `${Date.now()}_${email}_${originalname}`;
     const resultUpload = path.resolve(avatarDir, filename);
 
     const img = sharp(tempUpload);
@@ -111,8 +112,22 @@ const updateAvatar = async (req, res) => {
         })
         .toFile(resultUpload);
 
+
+    const uploadResult = await cloudinary.uploader
+       .upload(
+           tempUpload, {
+               folder: 'avatars',
+           }
+       )
+       .catch((error) => {
+           return (HttpError(409, error.message));
+       });
+
+    console.log(uploadResult.url)
+
+
     await fs.unlink(tempUpload);
-    const avatarURL = path.resolve('avatars', filename);
+    const avatarURL = path.resolve("avatars", filename);
     await userServices.updateUser({ id }, { avatarURL });
 
     res.json({ avatarURL });

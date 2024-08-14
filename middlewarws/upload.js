@@ -1,6 +1,7 @@
-import path from "path";
+import path from "node:path";
 import multer from "multer";
 import createFolderIsNotExist from "../helpers/checkFolder.js";
+import HttpError from "../helpers/HttpErrors.js";
 
 
 
@@ -16,9 +17,25 @@ const storage = multer.diskStorage({
       cb(null, file.originalname);
     },
   });
+
+  const limits = {
+    fileSize: 1024 * 1024 * 5,
+  };
+
+const fileFilter = (req, file, cb) => {
+  const extension = file.originalname.split('.').pop();
+
+  if (!["jpg", "jpeg", "png", "webp", "tiff", "gif", "svg"].includes(extension)) {
+    return cb(HttpError(400, `.${extension} is not allow extension`));
+  };
+
+  cb(null, true);
+};
   
   const upload = multer({
-    storage: storage,
+    storage,
+    limits,
+    fileFilter
   });
 
 
