@@ -123,12 +123,12 @@ const updateAvatar = async (req, res) => {
            return (HttpError(409, error.message));
        });
 
-    console.log(uploadResult.url)
+    const cloudURL = uploadResult.url;
 
 
     await fs.unlink(tempUpload);
     const avatarURL = path.resolve("avatars", filename);
-    await userServices.updateUser({ id }, { avatarURL });
+    await userServices.updateUser({ id }, { avatarURL, cloudURL });
 
     res.json({ avatarURL });
     
