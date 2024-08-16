@@ -25,7 +25,6 @@ describe("test controller userLogin", () => {
     it("test with correct userData", async () => {
 
         const response = await request(app).post("/api/auth/login").send(loginData);
-        // console.log(response);
 
         expect(response.status).toBe(200);
 
@@ -34,18 +33,29 @@ describe("test controller userLogin", () => {
     it("test token presence", async () => {
 
         const response = await request(app).post("/api/auth/login").send(loginData);
-        // console.log(response);
 
         expect(response.body.token).toBeTruthy();
 
     });
 
-    it("test with correct user object", async () => {
+    it("test user is object", async () => {
 
         const response = await request(app).post("/api/auth/login").send(loginData);
-        // console.log(response);
 
         expect(response.body.user).toBeInstanceOf(Object);
 
     });
+
+    it("test user object containing", async () => {
+
+        const response = await request(app).post("/api/auth/login").send(loginData);
+
+        expect(response.body.user).toEqual(
+            expect.objectContaining({
+              email: expect.any(String),
+              subscription: expect.any(String),
+            }),
+          );
+    });
+
 });
