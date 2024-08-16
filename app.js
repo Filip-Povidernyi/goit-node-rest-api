@@ -32,19 +32,20 @@ app.use((err, req, res, next) => {
 const { SERVER_PORT } = process.env;
 const port = Number(SERVER_PORT);
 
-(async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-        app.listen(port, () => {
-            console.log(`Server is running. Use our API on port: ${port}`);
-        });
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-        process.exit(1);
-    };
-})();
+let server = null;
 
 
+try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+    server = app.listen(port, () => {
+        console.log(`Server is running. Use our API on port: ${port}`);
+    });
+} catch (error) {
+    console.error('Unable to connect to the database:', error);
+    process.exit(1);
+};
 
+
+export default server;
 
