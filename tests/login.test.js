@@ -12,8 +12,11 @@ describe("test controller userLogin", () => {
         "password": "Karine0405Pass##"
     };
 
+    let response
+
     beforeAll(async ()=>{
         await request(app).post("/api/auth/register").send(loginData);
+        response = await request(app).post("/api/auth/login").send(loginData);
     });
 
     afterAll(async ()=>{
@@ -24,15 +27,11 @@ describe("test controller userLogin", () => {
 
     it("test with correct userData", async () => {
 
-        const response = await request(app).post("/api/auth/login").send(loginData);
-
         expect(response.status).toBe(200);
 
     });
 
     it("test token presence", async () => {
-
-        const response = await request(app).post("/api/auth/login").send(loginData);
 
         expect(response.body.token).toBeTruthy();
 
@@ -40,15 +39,11 @@ describe("test controller userLogin", () => {
 
     it("test user is object", async () => {
 
-        const response = await request(app).post("/api/auth/login").send(loginData);
-
         expect(response.body.user).toBeInstanceOf(Object);
 
     });
 
     it("test user object containing", async () => {
-
-        const response = await request(app).post("/api/auth/login").send(loginData);
 
         expect(response.body.user).toEqual(
             expect.objectContaining({
