@@ -28,6 +28,10 @@ const User = sequelize.define(
           type: DataTypes.STRING,
           required: true,
         },
+        cloudURL: {
+          type: DataTypes.STRING,
+          defaultValue: null,
+        },
       },
 );
 
