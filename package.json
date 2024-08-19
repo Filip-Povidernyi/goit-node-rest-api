@@ -1,11 +1,6 @@
 {
   "name": "goit-node-rest-api",
   "type": "module",
-  "jest": {
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    }
-  },
   "scripts": {
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
