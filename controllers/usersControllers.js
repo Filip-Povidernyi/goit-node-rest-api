@@ -20,7 +20,47 @@ const avatarDir = path.resolve('public', 'avatars');
 const createUser = async (req, res) => {
 
     const newUser = await userServices.addUser(req.body);
-    res.status(201).json(newUser);
+    res.status(201).json({
+        user: {
+            email: newUser.email,
+            subscription: newUser.subscription
+        }
+    });
+};
+
+const verify = async (req, res) => {
+
+    const {verificationToken} = req.params;
+    const user = userServices.findUser({verificationToken});
+    if (!user) {
+        throw HttpError(404);
+    };
+    await userServices.updateUser({verificationToken}, {
+        verify: true,
+        verificationToken: null
+    });
+
+    res.json({
+        message: "Verification successful"
+    });
+};
+
+const resendVerifyLetter = async (req, res) => {
+
+    const {email} = req.body;
+    const user = await userServices.findUser({email});
+    if (!user) {
+        throw HttpError(404);
+    };
+    if (user.verify) {
+        throw HttpError(400, "Verification has already been passed");
+    };
+
+    await userServices.sendVerifyEmail(user.verificationToken, email);
+
+    res.json({
+        message: "Verification email sent"
+    });
 };
 
 const loginUser = async (req, res) => {
@@ -30,6 +70,10 @@ const loginUser = async (req, res) => {
 
     if (!user) {
         throw HttpError(401, "Email or password is wrong");
+    };
+
+    if (!user.verify) {
+        throw HttpError(401, "Email not verify");
     };
 
     const passwordCompare = await bcrypt.compare(password, user.password);
@@ -123,12 +167,10 @@ const updateAvatar = async (req, res) => {
            return (HttpError(409, error.message));
        });
 
-    const cloudURL = uploadResult.url;
-
 
     await fs.unlink(tempUpload);
-    const avatarURL = path.resolve("avatars", filename);
-    await userServices.updateUser({ id }, { avatarURL, cloudURL });
+    const avatarURL = uploadResult.url;
+    await userServices.updateUser({ id }, { avatarURL });
 
     res.json({ avatarURL });
     
@@ -136,6 +178,8 @@ const updateAvatar = async (req, res) => {
 
 const userController = {
     createUser: ctrlWrapper(createUser),
+    verify: ctrlWrapper(verify),
+    resendVerifyLetter: ctrlWrapper(resendVerifyLetter),
     loginUser: ctrlWrapper(loginUser),
     checkCurrent: ctrlWrapper(checkCurrent),
     userLogout: ctrlWrapper(userLogout),
