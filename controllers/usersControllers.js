@@ -13,6 +13,7 @@ import cloudinary from "../helpers/cloudinary.js";
 
 
 
+
 const { SECRET_KEY_JWT } = process.env;
 const avatarDir = path.resolve('public', 'avatars');
 
