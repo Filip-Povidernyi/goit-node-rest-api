@@ -32,14 +32,18 @@ const createUser = async (req, res) => {
 const verify = async (req, res) => {
 
     const {verificationToken} = req.params;
-    const user = userServices.findUser({verificationToken});
+    const user = await userServices.findUser({verificationToken});
+
     if (!user) {
         throw HttpError(404);
     };
+
     await userServices.updateUser({verificationToken}, {
         verify: true,
         verificationToken: null
     });
+
+
 
     res.json({
         message: "Verification successful"
@@ -50,9 +54,11 @@ const resendVerifyLetter = async (req, res) => {
 
     const {email} = req.body;
     const user = await userServices.findUser({email});
+
     if (!user) {
         throw HttpError(404);
     };
+
     if (user.verify) {
         throw HttpError(400, "Verification has already been passed");
     };
@@ -60,7 +66,7 @@ const resendVerifyLetter = async (req, res) => {
     await userServices.sendVerifyEmail(user.verificationToken, email);
 
     res.json({
-        message: "Verification email sent"
+        message: "Verification email send"
     });
 };
 
