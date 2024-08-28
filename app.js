@@ -30,7 +30,8 @@ app.use((err, req, res, next) => {
 });
 
 const { SERVER_PORT } = process.env;
-const port = Number(SERVER_PORT);
+const port = process.env.PORT || Number(SERVER_PORT) || 3000;
+
 
 let server = null;
 
