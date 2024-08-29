@@ -1,0 +1,32 @@
+type: object
+required: 
+  -  id
+  - name
+  - email
+  - phone
+  - favorite
+properties: 
+  id:
+    description: "Contact's id"
+    type: integer
+    example: 1
+  name:
+    description: "Contact's name"
+    type: string
+    example: Iryna Kotlyarenko
+  email:
+    description: "Contact's email"
+    type: string
+    example: example@example.com
+  phone:
+    description: "Contact's phone number"
+    type: string
+    example: (066) 456 6666
+  favorite:
+    description: "Contact's favorite status"
+    type: boolean
+    example: false
+  owner:
+    description: "Contact's owner id"
+    type: integer
+    example: 1
