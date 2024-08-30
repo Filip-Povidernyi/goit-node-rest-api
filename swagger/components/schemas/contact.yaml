@@ -5,6 +5,7 @@ required:
   - email
   - phone
   - favorite
+  - owner
 properties: 
   id:
     description: "Contact's id"
